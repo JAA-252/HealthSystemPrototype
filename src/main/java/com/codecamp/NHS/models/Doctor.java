@@ -1,34 +1,66 @@
 package com.codecamp.NHS.models;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Doctor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer doctorId;
 
     private String firstName;
     private String lastName;
     private Integer age;
     private LocalDate birthDate;
-    private Integer doctorId;
-    private Integer residenceId;
-
     private List<Integer> patientIds; // IDs of assigned patients
-    private static final int MAX_PATIENTS = 100; // Example limit
 
-    public Doctor(Integer doctorId, String firstName, String lastName, Integer age, LocalDate birthDate){
+    @ManyToOne
+    @JoinColumn(name = "residence_id")
+    private Residence residence;
+
+    @OneToMany(mappedBy = "doctorId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Patient> patients = new ArrayList<>();
+
+    public static final int MAX_PATIENTS = 100;
+
+    public Doctor() {
+    }
+
+    public Doctor(Integer doctorId, String firstName, String lastName, Integer age, LocalDate birthDate) {
+        this.doctorId = doctorId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.birthDate = birthDate;
-        this.doctorId = doctorId;
-        this.residenceId = residenceId;
-        this.patientIds = new ArrayList<>();
     }
 
-    public Integer getResidenceId() {
-        return residenceId;
+    public void assignPatient(Patient patient) {
+        if (patient == null) throw new IllegalArgumentException("Patient cannot be null.");
+        if (patient.getDoctorId() != null) throw new IllegalStateException("Patient already assigned.");
+        if (patients.size() >= MAX_PATIENTS) throw new IllegalStateException("Max patients reached.");
+        if (!Objects.equals(patient.getResidenceId(), this.residence)) throw new IllegalStateException("Residence mismatch.");
+        patient.setDoctorId(this);
+        patients.add(patient);
+    }
+
+    public void unassignPatient(Patient patient) {
+        if (patient != null && patients.contains(patient)) {
+            patient.setDoctorId(null);
+            patients.remove(patient);
+        }
+    }
+
+    public Integer getResidenceId(Doctor doctor) {
+        return doctor.getResidence().getResidenceId();
+    }
+
+    public Residence getResidence() {
+        return residence;
     }
 
     public Integer getAge() {
@@ -59,8 +91,8 @@ public class Doctor {
         return lastName;
     }
 
-    public void setResidenceId(Integer residenceId) {
-        this.residenceId = residenceId;
+    public void setResidence(Residence residence) {
+        this.residence = residence;
     }
 
     public void setDoctorId(Integer doctorId) {
@@ -74,31 +106,4 @@ public class Doctor {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-    public void assignPatient(Patient patient) {
-        if (patient == null) {
-            throw new IllegalArgumentException("Patient cannot be null.");
-        }
-        if (patient.isAssigned()) {
-            throw new IllegalStateException("Patient already assigned to doctor: " + patient.getDoctorId());
-        }
-        if (patientIds.size() >= MAX_PATIENTS) {
-            throw new IllegalStateException("Doctor has reached maximum patients.");
-        }
-        if(!Objects.equals(patient.getResidenceId(), getResidenceId())){
-            throw new IllegalStateException("Not registered at the same location.");
-        }
-
-        // Assign the patient
-        patient.setDoctorId(this.doctorId); // Sync Patient's doctorId
-        patientIds.add(patient.getPatientId()); // Add to Doctor's list
-    }
-
-    public void unassignPatient(Patient patient) {
-        if (patient != null && patientIds.contains(patient.getPatientId())) {
-            patient.setDoctorId(null); // Clear Patient's doctorId
-            patientIds.remove(patient.getPatientId());
-        }
-    }
-
 }
