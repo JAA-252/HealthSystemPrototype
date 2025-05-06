@@ -2,7 +2,30 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id "com.github.node-gradle.node" version "3.5.1"
 }
+
+node {
+	version = '18.16.0'
+	npmVersion = '9.5.1'
+	download = true
+	// point to frontend dir
+	nodeProjectDir = file('frontend')
+}
+
+task npmBuild(type: NpmTask) {
+	dependsOn npmInstall
+	args = ['run', 'build']
+}
+
+processResources {
+	dependsOn npmBuild
+	from('frontend/build') {
+		into 'static'
+	}
+}
+
+
 
 group = 'com.codecamp'
 version = '0.0.1-SNAPSHOT'

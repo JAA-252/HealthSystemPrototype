@@ -2,6 +2,7 @@ package com.codecamp.NHS.controllers;
 
 import com.codecamp.NHS.models.Residence;
 import com.codecamp.NHS.services.ResidenceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,15 +11,21 @@ import java.util.List;
 @RequestMapping("/residences")
 public class ResidenceController {
 
+    @Autowired
     private final ResidenceService residenceService;
 
     public ResidenceController(ResidenceService residenceService) {
         this.residenceService = residenceService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Residence> getAllResidences() {
         return residenceService.getAllResidences();
+    }
+
+    @GetMapping("/{id}")
+    public Residence getResidenceById(@PathVariable Integer id) {
+        return residenceService.getResidenceById(id);
     }
 
     @PostMapping

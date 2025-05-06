@@ -1,5 +1,6 @@
 package com.codecamp.NHS.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
         import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Residence {
     private Integer maxCapacity = 100;
 
     @OneToMany(mappedBy = "residenceId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<Patient> patients = new ArrayList<>();
 
     public Residence() {}

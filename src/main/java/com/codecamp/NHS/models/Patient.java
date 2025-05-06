@@ -1,5 +1,6 @@
 package com.codecamp.NHS.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
@@ -18,10 +19,12 @@ public class Patient {
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
+    @JsonBackReference
     private Doctor doctorId;
 
     @ManyToOne
     @JoinColumn(name = "residence_id")
+    @JsonBackReference
     private Residence residenceId;
 
     public Patient() {}
@@ -57,11 +60,11 @@ public class Patient {
     }
 
     public Doctor getDoctorId() {
-        return doctorId;
+        return this.doctorId;
     }
 
     public Residence getResidenceId() {
-        return residenceId;
+        return this.residenceId;
     }
 
     // Private setter to enforce control via Doctor class
