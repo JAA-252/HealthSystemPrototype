@@ -12,6 +12,7 @@ public class Residence {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer residenceId;
 
+    private String name;
     private String town;
     private String city;
     private Integer maxCapacity = 100;
@@ -24,6 +25,7 @@ public class Residence {
 
     public Residence(Integer residenceId, String town, String city, Integer maxCapacity) {
         this.residenceId = residenceId;
+        this.name = name;
         this.town = town;
         this.city = city;
         this.maxCapacity = maxCapacity;
@@ -84,6 +86,14 @@ public class Residence {
 
     public void setTown(String town) {
         this.town = town;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

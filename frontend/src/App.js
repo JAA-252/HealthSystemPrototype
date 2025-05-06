@@ -16,7 +16,7 @@ function App() {
       <div className="App">
         <h1>NHS Dashboard</h1>
         <nav>
-          <Link to="/">Doctors</Link> |{' '}
+          <Link to="/doctors">Doctors</Link> |{' '}
           <Link to="/patients">Patients</Link> |{' '}
           <Link to="/residences">Residences</Link> |{' '}
           <Link to="/patients/new">+ Add Patient</Link> |{' '}
@@ -27,7 +27,7 @@ function App() {
           <Link to="/patients/search">Search Patients</Link>
         </nav>
         <Routes>
-          <Route path="/" element={<DoctorList />} />
+          <Route path="/doctors" element={<DoctorList />} />
           <Route path="/patients" element={<PatientList />} />
           <Route path="/residences" element={<ResidenceList />} />
           <Route path="/patients/new" element={<PatientForm />} />

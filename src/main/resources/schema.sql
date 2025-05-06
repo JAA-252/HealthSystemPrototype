@@ -1,6 +1,7 @@
 -- Create table for Residence
 CREATE TABLE residence (
     residence_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
     town VARCHAR(100),
     city VARCHAR(100),
     max_capacity INT DEFAULT 100

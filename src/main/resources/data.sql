@@ -1,7 +1,7 @@
 -- Insert sample Residences
-INSERT INTO residence (residence_id, town, city, max_capacity) VALUES
-(1, 'Greenwich', 'London', 100),
-(2, 'Cambridge Town', 'Cambridge', 80);
+INSERT INTO residence (residence_id, name, town, city, max_capacity) VALUES
+(1, 'Geg Halk', 'Greenwich', 'London', 100),
+(2, 'Cee Hall', 'Cambridge Town', 'Cambridge', 80);
 
 -- Insert sample Doctors
 INSERT INTO doctor (doctor_id, first_name, last_name, age, birth_date, residence_id) VALUES
